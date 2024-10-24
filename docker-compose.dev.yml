@@ -5,10 +5,11 @@ services:
     container_name: geopackage-dev
     volumes:
       - .:/workspace  # Mount current directory into the container
+      - ${DATA_FOLDER}:/app/data  # Mount the external folder to the internal folder
     ports:
-      - "8080:8080"   # For JupyterLab (optional)
-      - "2222:22"     # For SSH if needed (optional)
+      - "8080:8888"   
+      - "5000:5000"   
+      - "2222:22"    
     environment:
-      - DATABASE_TYPE=geopackage
-      - GEOPACKAGE_PATH=/workspace/data/metadata.gpkg
+      - RUNNING_IN_DOCKER=true  # Environment variable to detect Docker
     tty: true         # Keep the container running

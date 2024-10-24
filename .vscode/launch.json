@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Test Initialize",
+            "type": "python",
+            "request": "launch",
+            "program": "tests/test_initialize.py",  // Path to your test script
+            "console": "integratedTerminal",
+            "justMyCode": true,   // Optional: Debug only your code, not libraries
+            "env": {
+                "PYTHONPATH": "/workspace/"  // Ensures VS Code finds your library
+            }
+        }
+    ]
+}
