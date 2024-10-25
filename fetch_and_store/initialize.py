@@ -1,9 +1,36 @@
 import logging
 import os
 import sqlite3
-# import psycopg2
+import psycopg2
 from dotenv import load_dotenv
 
+def connect_to_geopackage(gpkg_path):
+    """
+    Connects to a GeoPackage database.
+    
+    :param gpkg_path: Path to the GeoPackage file.
+    :return: SQLite connection object.
+    """
+    conn = sqlite3.connect(gpkg_path)
+    return conn
+
+
+def create_metadata_table(conn):
+    """
+    Ensures the metadata table exists in the database.
+    
+    :param conn: Database connection object.
+    """
+    cursor = conn.cursor()
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS metadata (
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL,
+        value TEXT
+    )
+    """)
+    conn.commit()
+    
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -47,14 +74,20 @@ def initialize():
     db_type = os.getenv("DB_TYPE")
     
     if db_type == "geopackage":
-        conn = connect_to_geopackage(os.getenv("GPKG_PATH"))
+        gpkg_path = os.path.join(data_folder, "metadata.gpkg")
+        if not os.path.exists(gpkg_path):
+            open(gpkg_path, 'w').close()
+            logging.info(f"GeoPackage database created at {gpkg_path}")
+        conn = connect_to_geopackage(gpkg_path)
     elif db_type == "postgres":
         conn = connect_to_postgres()
     else:
         raise ValueError("DB_TYPE in .env must be either 'geopackage' or 'postgres'")
     
     # Ensure the metadata table exists
-    create_metadata_table(conn)
+    if conn:
+        create_metadata_table(conn)
     
+
     logging.info("Initialization complete.")
     return conn

@@ -20,3 +20,4 @@ Usage:
     create_metadata_table(conn)
     insert_metadata(conn, "address", "addresses.csv", "/data/addresses.csv")
 """
+from .initialize import initialize  # Import initialize function from the initialize.py file

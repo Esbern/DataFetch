@@ -5,7 +5,7 @@ services:
     container_name: geopackage-dev
     volumes:
       - .:/workspace  # Mount current directory into the container
-      - ${DATA_FOLDER}:/app/data  # Mount the external folder to the internal folder
+      - ${DATA_FOLDER}:/data  # Mount the external folder to the internal folder
     ports:
       - "8080:8888"   
       - "5000:5000"   
